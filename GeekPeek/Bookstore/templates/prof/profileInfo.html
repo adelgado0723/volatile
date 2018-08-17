@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{%  block additionalImports %}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1>Profile Information:</h1>
+
+    <div class="card">
+        <img src="/media/profile_images/img_avatar.png" alt="Avatar" style="width: 20%">
+    </div>
+    
+    <p> First Name: {{ userinfo.AuthUser_ID.first_name }}<br>
+        Last Name: {{ userinfo.AuthUser_ID.last_name }}<br>
+        Username: {{ userinfo.AuthUser_ID.username }}</p>
+
+    <form action="{% url 'prof:modify_password' %}">
+        <input type="submit" class="btn btn-group" value="Change Password"/>
+    </form>
+
+    <p> ProfileID: {{ userinfo.ProfileID }} <br>
+        CartID: {{ userinfo.Cart_ID }} </p>
+    <hr>
+    
+    <h3> Billing Information</h3>
+    {% for cc  in credit_cards %}
+        <h5>Credit Card #{{ forloop.counter }}</h5>
+        First Name: {{cc.Fname}} <br>
+        Last Name: {{cc.Lname}} <br>
+        Exp Year: {{cc.Exp_year}} <br>
+        Exp Month: {{cc.Exp_month}} <br>
+
+
+    {% endfor %}
+
+    <br/>
+    
+    <form action="{% url 'prof:add_reserved_card' %}">
+        <input type="submit" class="btn btn-success" value="Add a credit card" />
+    </form>
+
+
+<h3> Shipping Information</h3>
+    {% for usa  in shipping_address %}
+        <h5>Shipping #{{ forloop.counter }}</h5>
+        Address 1: {{usa.Address_ID.Address_1}} <br>
+        Address 2: {{usa.Address_ID.Addess_2}} <br>
+        City: {{usa.Address_ID.City_Town}} <br>
+        State: {{usa.Address_ID.State}} <br>
+        Zip Code: {{usa.Address_ID.Zip_Post}} <br>
+        Country: {{usa.Address_ID.Country}} <br>
+        Name: {{usa.Address_ID.Name}} <br>
+
+
+    {% endfor %}
+
+    <form action="{% url 'prof:add_shipping_address' %}">
+        <input type="submit" class="btn btn-success" value="Add a shipping address" />
+    </form>
+
+</div> 
+{% endblock %}

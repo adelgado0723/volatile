@@ -1,0 +1,103 @@
+{% extends 'myCart/base.html'%}
+{% load static %}
+{% block content %}
+ <br>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Welcome! You're in the cart page</h1>
+            <p>Below you'll find the items you've added to your cart.<br>
+            Check the make sure everything's ok. Once you're done, click <br>
+            'Complete Purchase(s)' to complete your transaction, 
+            <strong>Thanks for using Geek Peeks!</strong>
+        </div>
+    </div>
+
+
+ <!-- <h1 style="color:darkgoldenrod">Welcome! You're in the cart page</h1><br> -->
+
+
+    
+    <!-- <div class="alert alert-success" style = "border:2px;border-color:darkgreen"> -->
+        <!-- <h2>Your Cart Cookie value is: <br> <strong>{{Cart_ID}}</strong></h2> -->
+    <!-- </div> -->
+  
+    
+    <div class="container">
+        <div class="row">
+
+            <!-- Item information --> <!-- Left side of the grid-->
+            <div class="col" style="border: 2px solid lightblue; border-radius:5px;">            
+
+                <!-- Cart content -->
+                <h1> Shopping Cart </h1>
+                <ul class="list-group"> 
+                    {% for item in cart_content_list %}
+                    <li class="list-group-item border-info">  
+                        <strong>Book Title: {{item.ISBN.Title}} </strong> <br>
+                        <strong>Book ISBN: </strong> {{item.ISBN.ISBN}} <br>
+
+                        <!-- For now, cover image is now noImage.gif from static folder because idk how to get from media folder-->
+                        <strong>Cover Image: </strong> <br> 
+                        {% if item.ISBN.CoverImage == "book_images/noImage.png" %} 
+                            <h6 style="color:red">No image in DB! Nope Rat is disappointed.<br>
+                            Nope Rat says one should be set.</h6>
+                            <img src="/{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                            <img style="max-height:150px;max-width:150px" src="{% static "myCart/noImage.gif" %}" alt = "Book Picture">                                                         
+                        {% else %}
+                        <img src="/{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                        {% endif %}
+                        
+                        <br>
+                        <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br>
+                        <strong>Price: $</strong>{{item.ISBN.Price}} <br>    
+
+                        <!-- Quantity-->                     
+                        <strong>Quantity: </strong>
+                        <form class="form-inline" action = "changeQuantity/" method="POST">
+                            {% csrf_token %}
+                            <input class ="form-control form-inline" style="width:70px" type="text" name = "New_quantity" value="{{item.Quantity}}">  
+                            <input type= "hidden" name="Cart_contentID" value = "{{item.Cart_contentID}}"> 
+                            <input type = "submit" class="btn btn-info" value="Update">
+                        </form>                         
+                        <br>
+
+                        <!-- Remove from Cart Button-->
+                        <button class="btn btn-danger" style="width:100px;opacity:.9"> Remove </button>
+
+                        <!-- Save for Later Button -->
+                        <button class="btn btn-warning" style="width:150px;"> Save for Later</button>
+                    
+                    </li>
+                    {% endfor %}                
+                </ul> <!-- List-Group for: Shopping Cart -->
+
+                <br>
+
+                <!-- Saved for Later Content (Only displayed if user is logged in!) -->
+                {% if user.is_authenticated %}           
+                <h1> Saved for Later </h1>
+                <ul class="list-group">      
+                    <li class="list-group-item border-info">SET OF ITEMS</li>
+                </ul>
+                {% endif %}
+
+                <br>
+
+               
+            </div> <!-- Column-->
+            
+
+            <!-- Subtotal Dialog Box --> <!-- This is the right side of the grid-->
+            <div class="col border border-info rounded shadow" style="max-height:150px;max-width:300px;background-color:rgba(43, 213, 219, 0.295);">
+                Subtotal: ${{subtotal}}<br>
+                Shipping: FREE! <br>
+                Tax: TAX FREE! <br><br>
+                <button class="btn btn-info float-bottom" style="width:100%"><i class="fas fa-truck"></i> Checkout</button>
+            </div>
+            
+        </div> <!-- Grid -->
+    </div> <!-- Container-->
+
+    
+
+{% endblock %}

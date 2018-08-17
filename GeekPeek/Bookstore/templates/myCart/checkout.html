@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class = "container">
+    <div class = "row">
+    <div class = "col">
+        {% if user.is_authenticated %} 
+            <h1> Shipping address </h1>
+            {% if default_address %}
+                There is a shipping address<br>
+                Address1: {{default_address.Address_1}} <br>
+                Address2: {{default_address.Address_2}} <br>
+                Country: {{default_address.Country}} <br>
+                State: {{default_address.country}},
+                City: {{default_address.City_Town}} <br>
+                Name: {{default_address.Name}} <br>
+                <a href = "{% url 'prof:add_shipping_address' %}">Click here to change shipping address</a>
+                
+
+            {% else %}
+                There is no shipping address<br>
+                <a href="{% url 'prof:add_shipping_address' %}"> Click here to add one</a>
+            {% endif %}
+            <hr>
+        
+            <h1> Payment method </h1>
+            {% if default_credit_card %}
+                First name: {{default_credit_card.Fname}} <br>
+                Last name: {{default_credit_card.Lname}} <br>
+                Expiration Month: {{default_credit_card.Exp_month}} <br>
+                Expiration Year: {{default_credit_card.Exp_year}} <br>
+                Last Four Digits: {{card_last_four}} <br>
+                <a href="{% url 'prof:add_reserved_card' %}"> Click here to change default payment option</a>
+            {% else %}
+                No credit cards saved to account. <a href = "{% url 'prof:add_reserved_card' %}"> Click here to add one </a>
+            {% endif %}
+            <hr>
+    
+        {% else %} <!-- User not logged in -->
+            <h2>Please register or login to make an order</h2>
+            <a href = "{% url 'prof:register' %}"> Register </a> <br>        
+            <a href = "{% url 'prof:login' %}"> Login </a>
+        {% endif %}
+
+        {% for item in items %}
+        <h4>Item # {{forloop.counter}} </h4>
+        Book Name: {{item.ISBN.Title}} <br>
+        Book Cover:<br>
+        <img src="{{item.ISBN.CoverImage.url}}" style="max-width:128px;max-height=128px"> <br>
+        Price per: ${{item.ISBN.Price}} <br>
+        Quantity: {{item.Quantity}} <br>
+        {% endfor %}
+        <hr>
+    </div> <!-- Col -->
+    <hr>
+
+    <div class="col">
+        <div class="col border border-info rounded shadow" style="min-height:150px;max-height:150px;max-width:300px;background-color:rgba(43, 213, 219, 0.295);margin-top:56px;margin-right:15px">
+            Shipping: $0 <br>
+            Tax: $0 <br><hr>
+            Total: ${{subtotal}}<br>
+            <a href="{% url 'myCart:confirm_checkout' %}" class="btn btn-warning" > <i class="fas fa-truck"></i> Checkout </a>
+        </div>
+    </div>
+</div>
+
+
+</div> <!-- row-->
+
+{% endblock %}

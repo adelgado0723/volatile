@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block additionalImports %}
+{% endblock%}
+
+{% block content %}
+
+
+<div class="container">
+        <br><br>
+        <h1 class="bg-success rounded" align="center"><i class="fas fa-check"></i> <p style="display:inline">Item added successfully!</p> </h1> <br>
+<nav>
+    <a href="{% url 'myCart:index' %}">View Cart</a>|
+    <a href="/">Home</a>
+</nav>
+</div>
+
+
+{% endblock %}
+

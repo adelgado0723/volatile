@@ -1,0 +1,98 @@
+{% load static %} 
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Bootstrap CSS -->    
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> 
+
+    <!-- Add any additional imports that you would like in this block-->
+    {% block additionalImports %}
+    
+    {% endblock %}
+
+    <!-- Glyphicons by fontawesome.com -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <title>Geek Peek</title>
+  </head>
+  <body>      
+   
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+            <!-- Brand -->
+            <a class="navbar-brand" href="/">
+                <img class="rounded-circle" src= "{% static "images/TemporaryLogo.jpg" %}" width="30" height="30" class="d-inline-block align-top" alt="">    
+                Geek Peek
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                
+                <!-- Home link -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>                   
+                </ul>
+
+                <!-- Login/Register/Admin Button-->
+                {% if user.is_authenticated %}
+                    <span class="navbar-text mr-sm-2">
+                        Hello, {{user.username}}
+                    </span>
+                {% else %}
+                    <div class="btn-group m-sm-2">
+                        <a href="{% url 'prof:register' %}" class="btn btn-primary">Sign Up</a>
+                        <a href="{% url 'prof:login' %}" class="btn btn-primary">Login</a>     
+                        <a href="/admin/" class = "btn btn-info"> Admin</a>
+                    </div>
+                {% endif %}
+                
+                <!-- Cart Button -->
+                <a href="{% url 'myCart:index' %}" class="btn btn-warning mr-sm-2">
+                    <i class = "fa fa-shopping-cart"></i>
+                    View Cart
+                    <span class="badge" style="font-size:100%"></span> <!-- Static for now --> 
+                </a>
+                
+                <!--Search Bar-->
+                <form class="form-inline my-3 my-lg-0"> 
+                    <input class="form-control mr-sm-2" type="search" placeholder="Book Search" aria-label="Search">
+                    <button class="btn btn-success my-2 my-sm-0 mr-sm-1" type="submit">Search</button>
+                </form>
+
+                 <!--View Profile-->
+                {% if user.is_authenticated %}
+                <a href="{% url 'prof:profileInfo' %}" class="btn btn-primary mr-sm-1"> View Profile </a>
+                {% endif %} 
+
+                <!-- Logout button (if user loged in)-->
+                {% if user.is_authenticated %}
+                <span class="navbar-text mr-sm-2">
+                    <a href = "{% url 'prof:logout' %}" class = "btn btn-danger"> Log Out</a>
+                </span>
+                {% endif %}
+
+            </div> <!--Collapse-->
+        </nav> <!--Navigation bar-->
+    
+    
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
+    <script>window.jQuery || document.write('<script src="{% static 'js/jquery-slim.min.js' %}"><\/script>')</script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

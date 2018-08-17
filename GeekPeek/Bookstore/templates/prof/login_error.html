@@ -1,0 +1,53 @@
+{% load staticfiles %}
+{% block additionalImports %}
+<!-- Bootstrap core CSS -->
+<link href="{% static '/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom styles for this template -->  
+<link href="jumbotron.css" rel="stylesheet">
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<style>
+    input[type=text], input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 15px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+</style>
+{% endblock %} <!-- additional imports endblock-->
+
+{% block content %}
+<form method = "POST" action="{% url 'prof:login_error' %}" style="border:1px solid #ccc">
+<div class="container">
+    {% csrf_token %}
+    <h1>Sign In</h1>
+    <hr>
+    <p style="color:red;">Invalid Username or Password, please try again</p>
+
+    <label for="Username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="Username" required>
+    <label for="Password"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="Password" required>
+
+    <input type = "submit" class = "btn btn-success" value="Sign in">
+    <a type="button" href="/" class="btn btn-outline-danger my-0 my-sm-1">Cancel</a>
+    <p  align="right"><a href="{% url 'prof:register' %}" style="color:dodgerblue">Don't have an account? Click here to create one!</a></p>
+  </div>
+</form>
+{% endblock %}

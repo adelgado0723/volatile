@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block additionalImports %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<script src="main.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class = "navigation">
+        <ul>
+            <h1 class = "name">Geek Peek</h1>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Browse</a></li>
+        </ul>
+    </div>
+        <br><br>
+        <br><br>
+    
+    <div class="search">
+        
+            <form action="./searchresults.html">
+                <input type="text" name="entry" placeholder="Search">
+                <span><input type="submit" value="Submit"></span> 
+            </form>
+        
+    </div>
+    
+    <hr>
+    <div class="grid">
+        <div class="nested">
+            <div class="box a"><img src="{% static 'images/1.jpg' %}">
+                <br>Traction by Gino Wickman</div>
+            <div class="box b"><img src="{% static 'images/2.jpg' %}">
+            <br>The Confidence Code by Katty Kay & Claire Shipman</div>
+            <div class="box c"><img src="{% static 'images/43.jpg' %}">
+                <br>The Thief by J.R. Ward</div>
+            <div class="box d"><img src="{% static 'images/4.jpg' %}">
+                <br>Subscribed by Tien Tzuo</div>
+            <div class="box e"><img src="{% static 'images/5.jpg' %}">
+                <br>The Art & Science of Respect By James Prince</div>
+            <div class="box f"><img src="{% static 'images/6.jpg' %}">
+                <br>Principles by Ray Dalio</div>
+            <div class="box g"><img src="{% static 'images/7.jpg' %}">
+                <br>Think and Grow Rich by Napoleon Hill</div>
+            <div class="box h"><img src="{% static 'images/8.jpg' %}">
+                <br>Cashflow Quadrant by Robert T. Kiyosaki</div>
+            <div class="box i"><img src="{% static 'images/9.jpg' %}"></div>
+            <div class="box j"><img src="{% static 'images/10.jpg' %}"></div>
+            <div class="box k"><img src="{% static 'images/11.jpg' %}"></div>
+            <div class="box l"><img src="{% static 'images/12.jpg' %}"></div>
+
+        </div>
+
+        <h2 class="name">Coming soon</h2>
+        <hr>
+        <div class="nested">
+            <div class="box aa"><img src="{% static 'images/22.jpg' %}"></div>
+            <div class="box bb"><img src="{% static 'images/23.jpg' %}"></div>
+            <div class="box cc"><img src="{% static 'images/24.jpg' %}"></div>
+            <div class="box dd"><img src="{% static 'images/25.jpg' %}"></div>
+            <div class="box ee"><img src="{% static 'images/26.jpg' %}"></div>
+            <div class="box ff"><img src="{% static 'images/27.jpg' %}"></div>
+            <div class="box gg"><img src="{% static 'images/40.jpg' %}"></div>
+            <div class="box hh"><img src="{% static 'images/41.jpg' %}"></div>
+            <div class="box ii"><img src="{% static 'images/30.jpg' %}"></div>
+            <div class="box jj"><img src="{% static 'images/31.jpg' %}"></div>
+            <div class="box kk"><img src="{% static 'images/32.jpg' %}"></div>
+            <div class="box ll"><img src="{% static 'images/33.jpg' %}"></div>
+            <div class="box mm"><img src="{% static 'images/34.jpg' %}"></div>
+            <div class="box nn"><img src="{% static 'images/35.jpg' %}"></div>
+            <div class="box oo"><img src="{% static 'images/37.jpg' %}"></div>
+            <div class="box pp"><img src="{% static 'images/38.jpg' %}"></div>
+            <div class="box qq"><img src="{% static 'images/39.jpg' %}"></div>
+        </div>
+
+    </div>
+{% endblock %}

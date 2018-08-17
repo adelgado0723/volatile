@@ -1,0 +1,12 @@
+{% extends 'myCart/base.html' %}
+
+{% block content%}
+{% if user.is_authenticated %}
+Hello, {{user.username}}
+{% else %}
+Welcome
+{% endif %}
+
+Notice that user is never called into context!
+
+{% endblock %}

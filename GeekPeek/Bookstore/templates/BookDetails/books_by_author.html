@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block additionalImports %}
+<!-- Custom styles for this template -->
+
+<!-- Using Comment styling for books and details -->
+<link href="{% static 'css/comment.css' %}" media="all" rel="stylesheet" type="text/css" />
+
+
+<!-- Unpacking Author object and Books they wrote -->
+<script>
+	<% for key, value in context.items %>	
+	<%if key == 'books'%>
+	<!-- Obtaining BOOK objects -->
+	<% books = value %>
+	<%if key == 'author'%>
+	<!-- Obtaining Author Object -->
+	<%author = value%>
+	<% endfor %>
+</script>
+
+
+
+{% endblock %}
+{% block content %}
+<!-- Retrieving Author's name to display in page header -->
+<div class="container col-md-10">
+
+	<br></br>
+	<h1 class="text-left">Books by {{ author.Fname }} {{ author.Lname }}</h1>
+</div>
+<div class="container col-md-7">
+	<br></br>
+	<div id="comments">
+
+		<!-- Loops through each book in the database written by the specified author -->
+		{% for book in books %}	
+		<!-- Using the Comment style for each of the books -->
+		<div class="comment px-3 py-3">
+			<div class="comment-author"><h2>  <a class="btn-link" href="/BookDetails/?book={{ book.ISBN }}">{{book.Title}}</a></h2></div>
+			<div class="comment-text">
+				<div class="row">
+					<div class="col-4">
+						<center>
+							<a class="btn-link" href="/BookDetails/?book={{book.ISBN}}">
+								<img  class="mt-5  example-image img-thumbnail img-fluid" style="max-width:200px;" alt="image-1" src="{{book.CoverImage.url}}"/>
+							</a>
+						</center>
+					</div>
+					<div class="col ">
+						<br></br>
+						<div class="px-4 py-3">
+							<table class="table table-striped">
+								<tr>
+									<td><strong>Title:</strong></td>
+									<td>{{ book.Title }}</td>
+								</tr>
+								<tr>
+									<td ><strong>Author:</strong></td>
+									<td>{{book.AuthorID.Fname}} {{book.AuthorID.Lname}}</td>
+								</tr>
+								<tr>
+									<td><strong>ISBN:</strong></td>
+									<td>{{ book.ISBN }}</td>
+								</tr>
+								<tr>
+									<td><strong>Genre:</strong></td>
+									<td>{{ book.GenreID.Name }}</td>
+								</tr>
+								<tr>
+									<td><strong>Publisher:</strong></td>
+									<td>{{ book.PublisherID.Name }}</td>
+								</tr>
+								<tr>
+									<td><strong>Release Date:</strong></td>
+									<td>{{ book.Release_date }}</td>
+								</tr>
+							</table>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<br>
+		{% endfor %}
+	</div>
+
+</div>
+{% endblock %}
+
+

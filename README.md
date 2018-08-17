@@ -5,7 +5,9 @@
 
 - [**About**](#about)
 
+
 - **Projects**
+
 
 	- [**Web/Network**](#web-network)
 		
@@ -13,11 +15,13 @@
 		- [Werewolf!](#werewolf)  
 		- [School Database](#school-database)
 
+	
 	- [**Security**](#security)
 	
 		- [Text-In-Image Steganography](#text-in-image-steganography)
 		- [RSA Text-File Encryption](#rsa-text-file-encryption)
 
+	
 	- [**Data Analysis**](#data-analysis)
 
 		- [Decision Tree Generator](#decision-tree-generator) 
@@ -79,6 +83,7 @@ categories are:
 
 ---
 
+
 ## Security
 
 	
@@ -101,6 +106,7 @@ categories are:
 	- Steganography Using Least-Significant Bit Encoding
 	- Bitmap Image Manipulation
 
+
 ### [RSA Text-File Encryption](https://github.com/adelgado0723/portfolio/tree/master/RSAText-FileEncryption)
 
 - The RSA algorithm for encryption draws its strength from the *Fundamental
@@ -121,6 +127,7 @@ categories are:
 
 
 ---
+
 
 ## Data Analysis
 

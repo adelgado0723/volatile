@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block additionalImports %}
+
+<!-- Styles for this template -->
+
+<link href="{% static 'css/comment.css' %}" media="all" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/modal.css' %}" rel="stylesheet"> 
+<link rel="stylesheet" href="https://lokeshdhakar.com/projects/lightbox2/css/lightbox.css">
+<link rel="stylesheet" href="{% static 'css/star-ratings.css' %}">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+
+
+
+<!-- Jvascript code -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+<script src="{% static 'lightbox/src/js/lightbox.js' %}"></script>
+
+<!-- Switches Nav tabs -->
+<script>
+	$(document).ready(function(){
+		$(".nav-tabs a").click(function(){
+			$(this).tab('show');
+		});
+	});
+</script>
+
+<!-- Unpacking dictionary -->
+<script>
+	<% for key, value in context.items %>	
+		<%if key == 'book'%>
+			# Obtaining BOOK object
+			<% book = value %>
+		<%if key == 'comments' %>
+			# Obtaining COMMENT objects related to the book
+			<%comments = value%>
+		<%if key == 'n_filled_range'%>
+			# Obtaining a range of unfilled stars to draw
+			# domain = subset of {0, 1, 2, 3, 4, 5}
+			<%n_filled_range = value%>
+		<%if key == 'rating'%>
+			# domain = {0, 1, 2, 3, 4, 5}
+			<%rating = value%>
+		<%if key == 'range'%>
+			# Obtaining a range of filled stars to draw
+			# domain = subset of {0, 1, 2, 3, 4, 5}
+			<%range = value%>
+	<% endfor %>
+</script>
+
+{% endblock %}
+{% block content %}
+
+<div class="container  col-md-10">
+
+	<h1 class="text-left">{{ book.Title }}</h1>
+	<br></br>
+</div>
+<div class="container  col-md-7">
+
+	<a class="example-image-link" href="{{book.CoverImage.url}}" data-lightbox="example-1" >
+		<center>
+			<img  class="example-image img-thumbnail img-fluid" style="max-width:300px" alt="image-1" src="{{book.CoverImage.url}}"/>
+		</center>
+	</a>
+
+
+	<br></br>
+
+	<hr>
+	<div class="row">
+		<div class="col py-5 px-5 text-center">
+
+			<h4>${{ book.Price }}</h4>
+			<br>
+			<form method="POST" action="{% url 'myCart:add_item' %}">
+				{% csrf_token %}
+				<input type= "hidden" name="ISBN" value = "{{book.ISBN}}">
+				<input type = "submit" class="btn btn-info" style="width:150px;" value="Add to cart">
+			</form>
+		</div>
+
+		<div class="float-right text-center col py-5 px-5">
+
+			<div >
+
+				<h4>{{rating}} Star(s)</h4>		
+				<div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
+
+					<!-- Drawing any unfilled stars first-->
+					{% for i in n_filled_range %}
+					<input type="radio" id="star{{i|add:rating}}" name="rating" value="{{i|add:rating}}" /><label for="star{{i|add:rating}}" title="{{i|add:rating}} star"></label>
+					{% endfor %}
+
+					<!-- Drawing any filled stars -->
+					{% for i in range %}
+					<input type="radio" id="star{{i|add:"1"}}" name="rating" value="{{i|add:"1"}}" /><label style="color: #ffca08" for="star{{i|add:"1"}}" title="{{i|add:"1"}} star"></label>
+					{% endfor %}
+
+				</div>
+			</div>    
+		</div>
+	</div>
+
+
+
+	<hr>
+
+	<br></br>
+
+
+	<div >		
+
+		<!-- Nav tabs to toggle between the book summary, details, and comments --> 
+		<ul class="nav nav-tabs">
+
+			<li><a href="#description" class="btn btn-secondary active btn-group" role="button">Summary</a></li>
+			<li><a href="#details"  class="btn btn-secondary btn-group" role="button">Details</a></li>
+			<li><a href="#comments" class="btn btn-secondary btn-group" role="button" >Comments</a></li>
+		</ul>
+		<div class="panel-body tab-content border px-2 pt-3">
+			<!-- Retrieving description from book object -->
+			<div class="tab-pane in active col-lg" id="description">
+				<h2>Summary:</h2>
+				<hr>
+				<p>		
+					{{ book.Book_description|safe }}	
+				</p>
+
+			</div>
+
+			<!-- Retrieving book details -->
+			<div class="tab-pane fade col-lg" id="details">
+				<h2>Details:</h2>
+				<hr>
+				<div class="col-sm px-5">
+					<table class="table table-striped">
+						<tr>
+							<td><strong>Title:</strong></td>  
+							<td>{{ book.Title }}</td>
+						</tr>
+						<tr>
+							<td ><strong>Author:</strong></td>
+							<td> <a class="btn-link" href="/BookDetails/BooksByAuthor/?author={{ book.AuthorID.AuthorID }}">{{book.AuthorID.Fname}} {{book.AuthorID.Lname}}</a></td>
+						</tr>
+						<tr>
+							<td><strong>ISBN:</strong></td>
+							<td>{{ book.ISBN }}</td>
+						</tr>
+						<tr>
+							<td><strong>Genre:</strong></td>
+							<td>{{ book.GenreID.Name }}</td>
+						</tr>
+						<tr>
+							<td><strong>Publisher:</strong></td>
+							<td>{{ book.PublisherID.Name }}</td>
+						</tr>
+						<tr>
+							<td><strong>Release Date:</strong></td>
+							<td>{{ book.Release_date }}</td>
+						</tr>
+					</table>
+				</div>
+
+			</div>
+			<!-- Retrieving book comments -->
+			<div class="tab-pane fade col-lg" id="comments">
+				<h2>Comments:</h2>
+
+				{%for comment in comments%}	
+					<hr>
+					<div class="comment">
+						<div class="comment-author">{{ comment.ProfileID.AuthUser_ID }}</div>
+						<div class="comment-text">
+							{{ comment.Comment_Text }}
+							<div class="comment-date">{{ comment.Time_posted}}</div>
+						</div>
+					</div>
+				{% endfor %}
+
+			</div>
+		</div>
+
+	</div>
+	
+	<!-- Expandable *About the author* link -->
+	<div class="container float-left text-left">	
+		<br></br>
+		<br></br>
+		<div class="panel-group">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<a data-toggle="collapse" href="#collapse1"><h4 class="panel-title">About the author...</h4></a>
+				</div>
+
+				<div id="collapse1" class="panel-collapse collapse col-lg">
+					<!-- Retrieving book's author name and biography -->
+					<div class="panel-body">
+						<br></br>
+						<a class="btn-link" href="/BookDetails/BooksByAuthor/?author={{ book.AuthorID.AuthorID }}"><h5>{{book.AuthorID.Fname}} {{book.AuthorID.Lname}}</h5></a>
+						<br>
+						<div class="mx-5 px-5 comment-text">
+							{{book.AuthorID.Bio}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br></br>
+		<br></br>
+		<br></br>
+	</div>	
+
+</div>
+
+
+{% endblock %}
+
+

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{%  block additionalImports %}
+<style>
+    input[type=text]{
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0 5px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=text]:focus{
+    background-color: #ddd;
+    outline: none;
+}
+
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 15px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    {{ form.errors }} <!-- Prints errors if there where any -->
+
+    <form action= "{% url 'prof:add_shipping_address' %}" method = "POST" style="border:1px solid #ccc">
+    
+        {% csrf_token %}
+        <h1 style ='font-weight: bold;'>Shipping Information</h1>
+        <p> Please fill in this form to save your shipping information.</p>
+        <hr>
+        <br/>
+        <label for="Address_1"><b>Address 1 </b></label>
+        <input type="text" placeholder="Address 1" name="Address_1"  required>
+
+        <label for="Address_2"><b>Address 2 </b></label>
+        <input type="text" placeholder="Address 2" name="Address_2">
+
+        <label for="City"><b>City Town </b></label>
+        <input type="text" placeholder="City" name="City"  required>
+
+        <label for="State"><b>State </b></label>
+        <input type="text" placeholder="State" name="State"  required>
+
+        <label for="Zip_Code"><b>Zip Code </b></label>
+        <input type="number" placeholder="11111" name="Zip_Code"  required>
+
+        <label for="Country"><b>Country </b></label>
+        <input type="text" placeholder="Country" name="Country"  required>
+
+        <label for="Name"><b>Name </b></label>
+        <input type="text" placeholder="House" name="Name">
+
+
+        <br/>
+
+        <div class="clearfix">
+        <button type="submit" class="signupbtn btn btn-success">Add </button>
+        </div>
+    
+    </form>
+
+</div> <!-- container -->
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+ <br>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Welcome! You're in the cart page</h1>
+            <p>Below you'll find the items you've added to your cart.<br>
+            Check the make sure everything's ok. Once you're done, click <br>
+            'Complete Purchase(s)' to complete your transaction, 
+            <strong>Thanks for using Geek Peeks!</strong>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row col-md ">
+
+            <!-- Item information --> <!-- Left side of the grid-->
+            <div class="col">
+
+                <!-- Cart content -->
+                <h1> Shopping Cart </h1>
+                <ul class="list-group"> 
+                    {% if cart_content_list_length is 0 %}
+                        <h4 style = "color:darkgray">Empty</h4>
+                    {% endif %}
+
+                    {% for item in cart_content_list %}
+                    <li class="list-group-item" style = "background-color:#e9ecef;">  
+			<div class="row">
+			<div class="col">
+                        	<h5> {{item.ISBN.Title}} </h5> 
+				<h5> {{item.ISBN.ISBN}} </h5> 
+				<div class="px-5 py-1">
+                        	{% if item.ISBN.CoverImage == "book_images/noImage.png" or item.ISBN.CoverImage.url == 'None' or item.ISBN.CoverImage.url is None%} 
+                        		<img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                        	{% else %}
+                        		<img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                        	{% endif %}
+				</div>
+                        	<br>
+
+			</div>
+			<div class="col">
+                        	<!-- <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br> -->
+				<h5 class="pt-3">Price: ${{item.ISBN.Price}}</h5> 
+
+                        	<!-- Quantity-->                     
+                        	<h5>Quantity: </h5>
+                        	<form class="form-inline" action = "changeQuantity/" method="POST">
+                            		{% csrf_token %}
+                            		<input class ="form-control form-inline" style="width:50px" type="text" name = "New_quantity" value="{{item.Quantity}}">  
+                            		<input type= "hidden" name="Cart_contentID" value = "{{item.Cart_contentID}}"> 
+                            		<input type = "submit" class="btn btn-info" style="width:128px;" value="Update">
+
+                        	</form>                         
+                        	<br>
+				<div class="row">
+
+            			<div class="col">
+
+                        	<!-- Remove from cart -->
+                        	<form method = "POST" class = "form-inline" action="{% url 'myCart:removeCartItem' %}">
+                            		{% csrf_token %}
+                            		<input type = "hidden" name = "Cart_contentID" value="{{item.Cart_contentID}}">
+                            		<input type = "submit" class = "btn btn-danger" style="min-width:128px;max-width:128px" value="Remove">                            
+                        	</form>
+				</div>
+
+				<div class="col">
+
+                        	<!-- Save for later-->
+                        	{%if user.is_authenticated %}
+                        	<form method = "POST" class = "form-inline" action="{% url 'myCart:moveCartItemToSFL' %}">
+                        		{% csrf_token %}
+                            		<input type = "hidden" name = "Cart_contentID" value="{{item.Cart_contentID}}">
+                            		<input type = "submit" class = "btn btn-warning" style="width:128px;" value="Save for later">   
+                        	</form>
+                        	{% endif %}
+				</div>
+				</div>
+
+
+			</div>
+			</div>
+
+                    
+                    </li>
+                    {% endfor %}
+                </ul> <!-- List-Group for: Shopping Cart -->
+
+                <br>
+                    
+                <!-- Saved for Later Content (Only displayed if user is logged in!) -->
+                {% if user.is_authenticated %}
+                <ul class="list-group"></ul>
+                    <h1>Saved for later</h1>
+                    {% if saved_for_later_content_list_length is 0 %}
+                        <h4 style = "color:darkgray">Empty</h4>
+                    {% endif %}
+                    
+                    {% for item in saved_for_later_content_list %}
+                    <li class="list-group-item border-info">  
+                    <strong>Book Title: {{item.ISBN.Title}} </strong> <br>
+                    <strong>Book ISBN: </strong> {{item.ISBN.ISBN}} <br>
+                    
+                    <strong>Cover Image: </strong> <br> 
+                    {% if item.ISBN.CoverImage == "book_images/noImage.png" or item.ISBN.CoverImage is None %} 
+                    <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                    {% else %}
+                    <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                    {% endif %}
+                    
+                    <br>
+                    <!-- <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br> -->
+                    <strong>Price: $</strong>{{item.ISBN.Price}} <br>
+
+                    <!-- Remove from Saved for later Button-->
+                    <form method = "POST" class = "form-inline" action="{% url 'myCart:delete_SFL_item' %}">
+                        {% csrf_token %}
+                        <input type = "hidden" name = "Saved_ContentID" value="{{item.Saved_ContentID}}">
+                        <input type = "submit" class = "btn btn-danger" style="width:128px" value="Delete">
+                    </form>
+
+                    <!-- Move to cart -->
+                    <form method = "POST" class = "form-inline" action="{% url 'myCart:moveSflToCart' %}">
+                        {% csrf_token %}
+                        <input type = "hidden" name = "Saved_contentID" value="{{item.Saved_ContentID}}">
+                        <input type = "submit" class = "btn btn-success" style="width:128px;" value="Move to cart">
+                        </form>
+                    </li>
+                    {% endfor %} 
+                </ul>
+                {% endif %} <!-- is user authenticated -->
+            </div> <!-- Column-->
+            
+            <!-- Subtotal Dialog Box --> <!-- This is the right side of the grid-->
+            <div class="col border border-info rounded shadow" style="min-height:150px;max-height:150px;max-width:300px;background-color:rgba(43, 213, 219, 0.295);margin-top:56px;margin-right:15px">
+                Subtotal: ${{subtotal}}<br>
+                Shipping: FREE! <br>
+                Tax: TAX FREE! <br><br>
+                <!-- <a href="{% url 'myCart:checkout' %}" class="btn btn-warning" > <i class="fas fa-truck"></i> Make Order </a> -->
+                <center><a class = "btn btn-info" href = "{% url 'myCart:checkout' %}" style = "width:90%"> <i class="fas fa-truck"></i> checkout </a> </center>
+                <!-- <a class="btn btn-info" style="width:100%"><i class="fas fa-truck"></i> Checkout</button> -->
+            </div>
+            
+        </div> <!-- Grid -->
+    </div> <!-- Container-->
+{% endblock %}
